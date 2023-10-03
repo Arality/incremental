@@ -5,7 +5,7 @@ cmake_minimum_required(VERSION 3.16)
 set(CMAKE_CXX_STANDARD 17)
 
 # Project name
-project(Template)
+project(Incremental)
 
 # Setup output directory
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
@@ -17,40 +17,34 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 add_subdirectory(src)
 target_include_directories(main_lib PUBLIC include)
 
+include(FetchContent)
+FetchContent_Declare(
+  googletest
+  GIT_REPOSITORY https://github.com/google/googletest.git
+  GIT_TAG        v1.14.0
+)
+FetchContent_Declare(
+  entt
+  GIT_REPOSITORY https://github.com/skypjack/entt.git
+  GIT_TAG        v3.12.2
+)
+FetchContent_Declare(
+  glfw
+  GIT_REPOSITORY https://github.com/glfw/glfw.git
+  GIT_TAG        3.3.8
+)
+
+FetchContent_MakeAvailable(googletest entt glfw)
+
 # Debugger options
 # add_compile_options(-Weverything)
 
-
-# # Automatically Download all submodules
-# find_package(Git QUIET)
-# if(GIT_FOUND AND EXISTS "${PROJECT_SOURCE_DIR}/.git")
-# # Update submodules as needed
-#     option(GIT_SUBMODULE "Check submodules during build" ON)
-#     if(GIT_SUBMODULE)
-#         message(STATUS "Submodule update")
-#         execute_process(COMMAND ${GIT_EXECUTABLE} submodule update --init --recursive
-#                         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-#                         RESULT_VARIABLE GIT_SUBMOD_RESULT)
-#         if(NOT GIT_SUBMOD_RESULT EQUAL "0")
-#             message(FATAL_ERROR "git submodule update --init failed with ${GIT_SUBMOD_RESULT}, please checkout submodules")
-#         endif()
-#     endif()
-# endif()
+target_link_libraries(${PROJECT_NAME} main_lib EnTT::EnTT glfw)
 
 # Testing
 enable_testing()
 add_subdirectory(tests)
+target_include_directories(tests PUBLIC include)
 
-target_include_directories(catch_main PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}")
-set(url https://github.com/philsquared/Catch/releases/download/v2.13.6/catch.hpp)
-file(
-  DOWNLOAD ${url} "${CMAKE_CURRENT_BINARY_DIR}/catch.hpp"
-  STATUS status
-  EXPECTED_HASH SHA256=681e7505a50887c9085539e5135794fc8f66d8e5de28eadf13a30978627b0f47)
-list(GET status 0 error)
-if(error)
-  message(FATAL_ERROR "Could not download ${url}")
-endif()
-
-target_include_directories(catch_main PUBLIC "${CMAKE_CURRENT_BINARY_DIR}")
-target_link_libraries(catch_main main_lib)
+# target_include_directories(catch_main PUBLIC "${CMAKE_CURRENT_BINARY_DIR}")
+# target_link_libraries(tests main_lib googletest)
