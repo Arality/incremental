@@ -1,6 +1,5 @@
 #include "systems.hpp"
-#include "components.hpp"
-#include "entt/entity/fwd.hpp"
+
 
 
 // void update(entt::registry &registry) {
@@ -26,32 +25,20 @@
 
 
 
-DeltaTime::DeltaTime(){
-    this->lastTick = glfwGetTime();
-}
-
-float DeltaTime::getDeltaTime(){
-    const float time = glfwGetTime();
-    const float deltaTime = (float)time - lastTick;
-    this->lastTick = (float)time;
-    return deltaTime;
-}
 
 
 
-void update(const entt::registry& registry, DeltaTime& deltaTime){
+void updateSource(entt::registry& registry, const float deltaTime){
     auto sourceView = registry.view<Components::source>();
     auto playerView = registry.view<Components::player_score>();
-    const float delta = deltaTime.getDeltaTime();
 
-    for(auto& playerEntity : playerView){
-        auto player = playerView.get<Components::player_score>(playerEntity);
+    for (auto [entity, player]: playerView.each()) {
     
-        for(auto& sourceEntity: sourceView){
-            auto& source = sourceView.get<const Components::source>(sourceEntity);
-            player.score += source.production * source.amount * delta;
+        for(const auto& sourceEntity: sourceView){
+            const auto& source = sourceView.get<Components::source>(sourceEntity);
+            const double updateAmount = source.production * source.amount * deltaTime;
+            player.score = player.score + updateAmount;
         }
-        std::cout << "Update:" << player.score << '\n';
     }
     
 }
@@ -59,19 +46,19 @@ void update(const entt::registry& registry, DeltaTime& deltaTime){
 /*
 * Helper function to end the game during development
 */
-void endGame(entt::registry& registry){
+void endGame(const entt::registry& registry){
     auto view = registry.view<Components::player_score>();
     for(auto entity: view){
         auto& score = view.get<Components::player_score>(entity);
         
-        if(score.score >= 1e5){
+        if(score.score >= 50.0){
             Components::Global::gameOver = true;
         }
     }
 }
 
-void updateView(entt::registry& registry){
-    const auto view = registry.view<const Components::player_score>();
+void updateView(const entt::registry& registry){
+    const auto view = registry.view<Components::player_score>();
     for(auto& entity : view){
         const auto player = view.get<Components::player_score>(entity);
         std::cout << "UpdateView: " << player.score << '\n';

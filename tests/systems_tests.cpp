@@ -1,18 +1,4 @@
-#include <gtest/gtest.h>
-#include <entt/entt.hpp>
-#include <thread>
-#include <chrono>
-#include "components.hpp"
-#include "systems.hpp"
-#include "util.hpp"
 
-
-TEST(DeltaTime, Time_Check) {
-  const util::GlfwWrapper glfw = util::GlfwWrapper();
-  DeltaTime delta = DeltaTime();
-  std::this_thread::sleep_for(std::chrono::seconds(5));
-  ASSERT_DOUBLE_EQ(5.0, delta.getDeltaTime());
-}
 
 // TEST(update, updateTest){
 //     entt::registry registry;

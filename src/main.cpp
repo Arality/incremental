@@ -7,11 +7,14 @@
 #include <thread>
 #include <chrono>
 
+#include "SFML/Window/Window.hpp"
 #include "components.hpp"
+#include "entt/entity/fwd.hpp"
 #include "systems.hpp"
 #include <entt/entt.hpp>
 #include<cmath>
-#include <GLFW/glfw3.h>
+#include "sfml.hpp"
+#include <SFML/Window.hpp>
 
 
 // class GameTimer{
@@ -89,12 +92,26 @@
 //     }
 // }
 
+void setup(entt::registry& registry){
+    std::cout.precision(3);
+    const auto entity = registry.create();
+    registry.emplace<Components::source>(entity, (unsigned int) 1, 1.0, 1.0);
+    const auto player = registry.create();
+    registry.emplace<Components::player_score>(player, 0.0);
+}
 
 //Testing Main
 int main(){
-    GlfwWrapper wrapper = GlfwWrapper();
-    DeltaTime delta = DeltaTime();
-    std::this_thread::sleep_for(std::chrono::seconds(4));
-    const double time = delta.getDeltaTime();
-    std::cout << time << '\n';
+    sf::Window window(sf::VideoMode(800, 600), "My window");
+    SfmlManager sfml = SfmlManager(window);
+    util::DeltaTime deltaTime = util::DeltaTime();
+    entt::registry registry;
+    setup(registry);
+
+    while(!Components::Global::gameOver){
+        const float delta = deltaTime.getDeltaTime();
+        updateSource(registry, delta);
+        updateView(registry);
+        endGame(registry);
+    }
 }

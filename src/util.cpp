@@ -2,21 +2,23 @@
 
 namespace util{
 
-    GlfwWrapper::GlfwWrapper(){
-        if(!glfwInit()){
-            fprintf( stderr, "Failed to initialize GLFW\n" );
-            exit( EXIT_FAILURE );
-        }
-    }
-    GlfwWrapper::~GlfwWrapper(){
-        glfwTerminate();
-    }
+/**
+ * @brief Construct a new Delta Time:: Delta Time object
+ * 
+ */
+DeltaTime::DeltaTime(){
+    clock.restart();
+}
 
-    template<typename T>
-    void getEntity(const entt::registry& registry, const T entity){
-        const auto view = registry.view<entity>();
-        for(auto&  item: view){
-            return item.get<entity>(item);
-        }
-    }
+/**
+ * @brief Get the elapsed delta time since last called
+ * 
+ * @return float 
+ */
+float DeltaTime::getDeltaTime(){
+    const sf::Time elapsed = clock.restart();
+    const float sec = elapsed.asSeconds();
+    return sec;
+}
+
 };

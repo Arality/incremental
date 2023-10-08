@@ -3,16 +3,27 @@
 #include "components.hpp"
 #include <entt/entity/registry.hpp>
 #include <iostream>
-#include <GLFW/glfw3.h>
+#include "components.hpp"
+#include "util.hpp"
 
-class DeltaTime{
-    public:
-        DeltaTime();
-        float getDeltaTime();
-    private:
-        float lastTick;
-};
+/**
+ * @brief Calculates all source and add's to players score
+ * 
+ * @param registry 
+ * @param delta 
+ */
+void updateSource(entt::registry& registry, const float delta);
 
-void update(const entt::registry& registry, DeltaTime& delta);
-void endGame(entt::registry& registry);
-void updateView(entt::registry& registry);
+/**
+ * @brief Dev tool to end the game at specified intervals
+ * 
+ * @param registry 
+ */
+void endGame(const entt::registry& registry);
+
+/**
+ * @brief Displayer player score to the screen
+ * 
+ * @param registry 
+ */
+void updateView(const entt::registry& registry);
