@@ -7,11 +7,9 @@ namespace Components{
     struct player_score{
         double score;
     };
-    struct game_status{
-        bool gameOver;
-    };
     struct source{
         unsigned int amount;
         double production;
+        double cost;
     };
 }
