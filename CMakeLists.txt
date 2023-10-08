@@ -13,6 +13,8 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
 # Enable compile_commands.json
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+set(SFML_VERSION "2.6.0")
+
 # Add subdirectories
 add_subdirectory(src)
 target_include_directories(main_lib PUBLIC include)
@@ -29,18 +31,23 @@ FetchContent_Declare(
   GIT_TAG        v3.12.2
 )
 FetchContent_Declare(
-  glfw
-  GIT_REPOSITORY https://github.com/glfw/glfw.git
-  GIT_TAG        3.3.8
+  sfml
+  GIT_REPOSITORY https://github.com/SFML/SFML.git
+  GIT_TAG        2.6.0
 )
 
-FetchContent_MakeAvailable(googletest entt glfw)
+FetchContent_MakeAvailable(googletest entt sfml)
 
 # Debugger options
 # add_compile_options(-Weverything)
 
-target_link_libraries(${PROJECT_NAME} main_lib EnTT::EnTT glfw)
-
+target_link_libraries(${PROJECT_NAME} main_lib EnTT::EnTT)
+target_link_libraries(main_lib
+                      # sfml-audio
+                      # sfml-graphics
+                      sfml-system
+                      sfml-window
+)
 # Testing
 enable_testing()
 add_subdirectory(tests)
