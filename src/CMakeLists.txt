@@ -5,5 +5,3 @@ add_library(main_lib
 
 add_executable(${PROJECT_NAME} 
                 main.cpp)
-
-target_link_libraries(main_lib EnTT::EnTT)
