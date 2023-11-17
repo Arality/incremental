@@ -1,3 +1,5 @@
+#pragma once
+
 #include <SFML/Window.hpp>
 
 class SfmlManager{
