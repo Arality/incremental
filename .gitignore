@@ -35,7 +35,8 @@
 build
 
 # Ignore any executables
-bin/
+bin/Incremental
+bin/tests
 
 # Linux ignore
 
