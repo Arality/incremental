@@ -1,0 +1,22 @@
+[
+    {
+        "name": "Leather Helmet",
+        "position": "head",
+        "slots": 0
+    },
+    {
+        "name": "Leather Tunic",
+        "position": "chest",
+        "slots": 0
+    },
+    {
+        "name": "Leather Gloves",
+        "position": "gloves",
+        "slots": 0
+    },
+    {
+        "name": "Leather Boots",
+        "position": "boots",
+        "slots": 0
+    }
+]
